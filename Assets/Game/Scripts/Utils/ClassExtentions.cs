@@ -1,5 +1,7 @@
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class ClassExtentions
@@ -66,5 +68,16 @@ public static class ClassExtentions
             list[k] = list[n];
             list[n] = value;
         }
+    }
+
+    public static List<T> GetRandomItems<T>(this List<T> items, int amount)
+    {
+        var formattedAmount = Mathf.Min(amount, items.Count - 1);
+
+        var temp = new List<T>(items);
+
+        temp.Shuffle();
+
+        return temp.Take(formattedAmount).ToList();
     }
 }
