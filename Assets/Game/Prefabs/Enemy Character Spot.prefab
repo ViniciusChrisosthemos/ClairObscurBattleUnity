@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8330756567387505253}
   m_Layer: 0
-  m_Name: Attacker Position
+  m_Name: Attacker Spot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,6 +157,7 @@ Transform:
   - {fileID: 2407889700858247621}
   - {fileID: 3872024107604596704}
   - {fileID: 8330756567387505253}
+  - {fileID: 7267755901402419327}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2689518760821392943
@@ -183,6 +184,7 @@ MonoBehaviour:
   SkillSelectionCanvasSpot: {fileID: 0}
   AnimatorCameraPivot: {fileID: 0}
   AttackerSpot: {fileID: 8330756567387505253}
+  VFXSpot: {fileID: 7267755901402419327}
   TargetPosition: {fileID: 6310757308406338101}
   SliderHPBar: {fileID: 3363563593285196429}
   _characterAnimator: {fileID: 7025700369511077357}
@@ -525,6 +527,37 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &8463055919200869468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7267755901402419327}
+  m_Layer: 0
+  m_Name: VFX Spot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7267755901402419327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463055919200869468}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.258, z: 0.237}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6310757308406338101}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9134480638469458212
 GameObject:
   m_ObjectHideFlags: 0

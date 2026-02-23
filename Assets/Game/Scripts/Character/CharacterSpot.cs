@@ -16,6 +16,7 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
     public Transform SkillSelectionCanvasSpot;
     public Transform AnimatorCameraPivot;
     public Transform AttackerSpot;
+    public Transform VFXSpot;
     public Transform TargetPosition;
     public Slider SliderHPBar;
 

@@ -31,6 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1887220925751803001}
+  - {fileID: 4031147115002949670}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &791760587613231173
@@ -45,8 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0776b54d60fb344f865ca6758b27674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_characterSpot: {fileID: 0}
-  m_enemyCharacterSpot: {fileID: 0}
   m_speedInQTE: 0.05
   m_runSpeed: 0.5
   m_quickTimeEventManager: {fileID: 2226927417478953523}
@@ -55,6 +54,39 @@ MonoBehaviour:
   m_qteAmount: 2
   m_camera: {fileID: 0}
   m_mainCameraPivot: {fileID: 0}
+  m_vfxParent: {fileID: 4031147115002949670}
+  m_missVFX: {fileID: 6137334203309589648, guid: 37b672f0966a02b4b94a2c1d29246cf8, type: 3}
+--- !u!1 &5692774406549256757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4031147115002949670}
+  m_Layer: 0
+  m_Name: VFX Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4031147115002949670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5692774406549256757}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4965008792875324205}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8990133692269969517
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -20,6 +20,12 @@ public class BattleSkillAnimationController : MonoBehaviour
     public Transform m_camera;
     public Transform m_mainCameraPivot;
 
+    [Header("VFX")]
+    [SerializeField] private Transform m_vfxParent;
+    [SerializeField] private GameObject m_missVFX;
+    [SerializeField] private BattleDamageNotificationController m_damageVFX;
+
+    private SkillSO m_skill;
     private CharacterSpot m_characterSpot;
     private CharacterSpot m_enemyCharacterSpot;
 
@@ -30,6 +36,7 @@ public class BattleSkillAnimationController : MonoBehaviour
     {
         m_callback = callback;
 
+        m_skill = skill;
         m_characterSpot = character;
         m_enemyCharacterSpot = targets[0];
 
@@ -87,10 +94,17 @@ public class BattleSkillAnimationController : MonoBehaviour
         if (m_quickTimeEventResult.All(result => result == QuickTimeEventResultType.Miss))
         {
             m_enemyCharacterSpot.DodgeAttack();
+
+            Instantiate(m_missVFX, m_enemyCharacterSpot.VFXSpot.position, m_enemyCharacterSpot.VFXSpot.rotation, m_vfxParent);
         }
         else
         {
-            m_enemyCharacterSpot.ApplyDamage(50);
+            var damange = 50;
+
+            m_enemyCharacterSpot.ApplyDamage(damange);
+
+            var instance = Instantiate(m_damageVFX, m_enemyCharacterSpot.VFXSpot.position, m_enemyCharacterSpot.VFXSpot.rotation, m_vfxParent);
+            instance.SetContent(damange);
         }
     }
 }
