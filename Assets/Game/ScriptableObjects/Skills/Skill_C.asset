@@ -17,3 +17,4 @@ MonoBehaviour:
   Description: Deals 50 damage to all enemies
   DicesRequired: []
   TargetType: 2
+  AnimationTrigger: Attack

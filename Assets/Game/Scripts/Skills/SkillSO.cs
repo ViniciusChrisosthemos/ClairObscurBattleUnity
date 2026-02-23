@@ -19,4 +19,5 @@ public class SkillSO : ScriptableObject
     public string Description;
     public List<Sprite> DicesRequired;
     public SkillTargetType TargetType;
+    public string AnimationTrigger;
 }

@@ -9,9 +9,12 @@ using UnityEngine.InputSystem;
 public class BattleController : MonoBehaviour
 {
     [SerializeField] private List<CharacterSpot> _characters;
+    [SerializeField] private BattleSkillAnimationController m_battleSkillAnimationController;
 
+    [Header("Events")]
     public UnityEvent<CharacterSpot> OnCharacterTurnChanged;
 
+    private CharacterSpot m_currentCharacterTurn;
     private TimelineController<CharacterSpot> _timelieController;
 
     private void Awake()
@@ -39,20 +42,20 @@ public class BattleController : MonoBehaviour
             _timelieController.UpdateTimeLine();
         }
 
-        var element = _timelieController.Dequeue();
+        m_currentCharacterTurn = _timelieController.Dequeue();
 
-        OnCharacterTurnChanged?.Invoke(element);
+        OnCharacterTurnChanged?.Invoke(m_currentCharacterTurn);
     }
 
     public List<CharacterSpot> GetCharacterSpotsOrder() => _timelieController.GetTimeline();
 
     public List<CharacterRuntime> GetPlayerCharacterRuntime() => _characters.FindAll(c => c.IsPlayerCharacter).ConvertAll(c => c.CharacterRuntime);
 
-    public void PlayAction(SkillSO currentSkill, List<CharacterSpot> characterSeleced)
+    public void PlayAction(SkillSO skill, List<CharacterSpot> targets)
     {
-        foreach (var spot in characterSeleced)
+        m_battleSkillAnimationController.PlaySkill(m_currentCharacterTurn, skill, targets, () =>
         {
-            spot.CharacterRuntime.TakeDamage(100);
-        }
+            PassTurn();
+        });
     }
 }

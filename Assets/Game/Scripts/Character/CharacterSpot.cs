@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,17 +9,23 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
 {
     [Header("References")]
     public CharacterRuntime CharacterRuntime;
+    public Transform ModelTransform;
     public Transform ActionSelectionCameraSpot;
     public Transform SkillSelectionCameraSpot;
     public Transform ActionSelectionCanvasSpot;
     public Transform SkillSelectionCanvasSpot;
+    public Transform AnimatorCameraPivot;
+    public Transform AttackerSpot;
     public Transform TargetPosition;
     public Slider SliderHPBar;
 
     [Header("Animation")]
     [SerializeField] private Animator _characterAnimator;
+    [SerializeField] private SkillAnimationTriggers m_skillAnimationTriggers;
     [SerializeField] private string _takeDamageTriggerName = "TakeDamage";
     [SerializeField] private string _dieTriggerName = "Die";
+    [SerializeField] private string _dodgeTriggerName = "Dodge";
+    [SerializeField] private string _runBoolName = "Run";
 
     [Header("Parameters")]
     public bool IsPlayerCharacter = false;
@@ -81,4 +88,51 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
         SliderHPBar.maxValue = CharacterRuntime.MaxHP;
         SliderHPBar.value = CharacterRuntime.CurrentHP;
     }
+
+    public void DodgeAttack()
+    {
+        _characterAnimator.SetTrigger(_dodgeTriggerName);
+    }
+
+    public void ApplyDamage(int damage)
+    {
+        CharacterRuntime.TakeDamage(damage);
+        UpdateHP();
+    }
+
+    public void ResetPosition()
+    {
+        ModelTransform.localPosition = Vector3.zero;
+    }
+
+    public void RunToPosition(Transform targetSpot, float speed, Action callback)
+    {
+        StartCoroutine(AnimateRunCoroutine(targetSpot.position, targetSpot.rotation, speed, callback));
+    }
+
+    private IEnumerator AnimateRunCoroutine(Vector3 targetPosition, Quaternion targetRotation, float speed, Action callback)
+    {
+        _characterAnimator.SetBool(_runBoolName, true);
+
+        var t = 0f;
+        var startPosition = ModelTransform.position;
+
+        while (t < 1f)
+        {
+            ModelTransform.position = Vector3.Lerp(startPosition, targetPosition, t);
+
+            t += Time.deltaTime / speed;
+
+            yield return null;
+        }
+
+        ModelTransform.position = targetPosition;
+
+        _characterAnimator.SetBool(_runBoolName, false);
+
+        callback?.Invoke();
+    }
+
+    public Animator Animator => _characterAnimator;
+    public SkillAnimationTriggers SkillAnimationTriggers => m_skillAnimationTriggers;
 }

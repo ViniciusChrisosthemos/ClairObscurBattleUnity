@@ -39,10 +39,6 @@ public class QuickTimeEventElementController : MonoBehaviour
         Perfect
     }
 
-    private void Awake()
-    {
-    }
-
     public void Setup(float qteTime, Key key)
     {
         m_duration = qteTime;

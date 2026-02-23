@@ -17,3 +17,4 @@ MonoBehaviour:
   Description: Deals 30 damage to an enemy
   DicesRequired: []
   TargetType: 1
+  AnimationTrigger: Attack

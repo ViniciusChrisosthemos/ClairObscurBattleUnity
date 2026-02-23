@@ -17,3 +17,4 @@ MonoBehaviour:
   Description: Stun an enemy for 2 turns
   DicesRequired: []
   TargetType: 1
+  AnimationTrigger: Attack

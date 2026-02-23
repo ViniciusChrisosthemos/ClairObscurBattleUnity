@@ -140,22 +140,11 @@ public class UIBattleCanvasView : MonoBehaviour
         _currentState = SelectionState.TargetSelection;
     }
 
-    private async void HandleTargetSelected(List<CharacterSpot> characterSeleced)
+    private void HandleTargetSelected(List<CharacterSpot> characterSeleced)
     {
         _battleController.PlayAction(_currentSkill, characterSeleced);
         
         _currentState = SelectionState.ActionSelection;
-
-        await HandleSkillApplied();
-    }
-
-    private async Task HandleSkillApplied()
-    {
-        _enemiesSpots.ForEach(character => character.UpdateHP());
-
-        await Task.Delay(1000);
-
-        _battleController.PassTurn();
     }
 
     public void ShowActionSelectionView()

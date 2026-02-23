@@ -15,7 +15,7 @@ public class GeneralDebug : MonoBehaviour
     {
         if (Keyboard.current.pKey.wasPressedThisFrame)
         {
-            m_quickTimeEventManager.StartEvents(m_qteTime, m_amount, m_interval);
+            m_quickTimeEventManager.StartEvents(m_qteTime, m_amount, m_interval, null);
         }
     }
 }

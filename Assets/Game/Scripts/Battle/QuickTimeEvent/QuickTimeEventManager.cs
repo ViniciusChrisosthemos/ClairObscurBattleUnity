@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,38 +13,51 @@ public class QuickTimeEventManager : MonoBehaviour
     [SerializeField] private List<Transform> m_locations;
     [SerializeField] private QuickTimeEventElementController m_quickTimeEventPrefab;
 
-    public UnityEvent OnInputGiven;
-
+    private Key m_keyPressed;
     private Queue<QuickTimeEventElementController> m_quickTimeEvents;
+    private List<QuickTimeEventElementController.QuickTimeEventResultType> m_results;
+    private Action<List<QuickTimeEventElementController.QuickTimeEventResultType>> m_callback;
 
     private void Awake()
     {
+        m_keyPressed = Key.None;
         m_quickTimeEvents = new Queue<QuickTimeEventElementController>();
     }
 
     private void Update()
     {
-        if (Keyboard.current.anyKey.wasPressedThisFrame)
-        {
-            if (m_quickTimeEvents.Count == 0) return;
+        if (m_quickTimeEvents.Count == 0) return;
 
+        m_keyPressed = GetKeyPressed(m_possibleKeyCode);
+
+        if (m_keyPressed != Key.None)
+        {
             var qtEvent = m_quickTimeEvents.Dequeue();
 
-            qtEvent.HandlePlayerInput(GetKeyPressed(m_possibleKeyCode));
-        }
+            var result = qtEvent.HandlePlayerInput(m_keyPressed);
 
-        if (m_quickTimeEvents.Count > 0)
+            m_results.Add(result);
+
+            CheckEvents();
+        }
+        else
         {
             if (m_quickTimeEvents.First().HasFinished)
             {
                 m_quickTimeEvents.Dequeue();
+
+                m_results.Add(QuickTimeEventElementController.QuickTimeEventResultType.Miss);
+
+                CheckEvents();
             }
         }
     }
 
-    public void StartEvents(float qteTime, int amount, float interval)
+    public void StartEvents(float qteTime, int amount, float interval, Action<List<QuickTimeEventElementController.QuickTimeEventResultType>> callback)
     {
+        m_callback = callback;
         m_quickTimeEvents = new Queue<QuickTimeEventElementController>();
+        m_results = new List<QuickTimeEventElementController.QuickTimeEventResultType>();
 
         StartCoroutine(SpawmEventsCoroutine(qteTime, amount, interval));
     }
@@ -65,6 +79,14 @@ public class QuickTimeEventManager : MonoBehaviour
             m_quickTimeEvents.Enqueue(instance);
 
             yield return new WaitForSeconds(interval);
+        }
+    }
+
+    private void CheckEvents()
+    {
+        if (m_quickTimeEvents.Count == 0)
+        {
+            m_callback?.Invoke(m_results);
         }
     }
 

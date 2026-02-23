@@ -17,3 +17,4 @@ MonoBehaviour:
   Description: Heals 20 HP from an ally
   DicesRequired: []
   TargetType: 1
+  AnimationTrigger: Attack
