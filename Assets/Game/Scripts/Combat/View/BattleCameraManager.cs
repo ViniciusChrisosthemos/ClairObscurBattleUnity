@@ -1,10 +1,11 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
-public class BattleCameraController : MonoBehaviour
+using System;
+using System.Collections;
+
+public class BattleCameraManager : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("References")]
     [SerializeField] private Transform m_camera;
 
     [Header("Animation Parameters")]
@@ -53,6 +54,3 @@ public class BattleCameraController : MonoBehaviour
         m_camera.localRotation = Quaternion.identity;
     }
 }
-
-
-

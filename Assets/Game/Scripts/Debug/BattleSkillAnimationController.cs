@@ -30,7 +30,7 @@ public class BattleSkillAnimationController : MonoBehaviour
     private CharacterSpot m_enemyCharacterSpot;
 
     private Action m_callback;
-    private List<QuickTimeEventResultType> m_quickTimeEventResult;
+    private QuickTimeEventResult m_quickTimeEventResult;
 
     public void PlaySkill(CharacterSpot character, SkillSO skill, List<CharacterSpot> targets, Action callback)
     {
@@ -57,12 +57,17 @@ public class BattleSkillAnimationController : MonoBehaviour
     {
         m_characterSpot.Animator.speed = m_speedInQTE;
 
-        m_quickTimeEventManager.StartEvents(m_qteDuration, m_qteAmount, m_qteInterval, (result) => m_quickTimeEventResult = result);
+        m_quickTimeEventManager.StartEvents(m_qteDuration, m_qteAmount, m_qteInterval, HandleQTEResult);
     }
 
     private void HandleEndQTE()
     {
         m_characterSpot.Animator.speed = 1;
+    }
+
+    private void HandleQTEResult(QuickTimeEventResult result)
+    {
+        m_quickTimeEventResult = result;
     }
 
     private void HandleAnimationStart()
@@ -91,7 +96,7 @@ public class BattleSkillAnimationController : MonoBehaviour
 
     private void HandleDamageEvent()
     {
-        if (m_quickTimeEventResult.All(result => result == QuickTimeEventResultType.Miss))
+        if (m_quickTimeEventResult.Misses == 0)
         {
             m_enemyCharacterSpot.DodgeAttack();
 

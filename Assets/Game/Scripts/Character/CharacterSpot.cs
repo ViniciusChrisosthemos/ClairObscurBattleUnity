@@ -26,6 +26,7 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
     [SerializeField] private string _takeDamageTriggerName = "TakeDamage";
     [SerializeField] private string _dieTriggerName = "Die";
     [SerializeField] private string _dodgeTriggerName = "Dodge";
+    [SerializeField] private string _parryTriggerName = "Parry";
     [SerializeField] private string _runBoolName = "Run";
 
     [Header("Parameters")]
@@ -35,6 +36,8 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
     public UnityEvent<CharacterSpot> OnCharacterHoverEnter;
     public UnityEvent<CharacterSpot> OnCharacterHoverExit;
     public UnityEvent<CharacterSpot> OnCharacterSelected;
+
+    private float m_lastParryTime;
 
     private void Start()
     {
@@ -95,6 +98,14 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
         _characterAnimator.SetTrigger(_dodgeTriggerName);
     }
 
+
+    public void Parry()
+    {
+        m_lastParryTime = Time.time;
+
+        _characterAnimator.SetTrigger(_parryTriggerName);
+    }
+
     public void ApplyDamage(int damage)
     {
         CharacterRuntime.TakeDamage(damage);
@@ -134,6 +145,7 @@ public class CharacterSpot : MonoBehaviour, ITimelineElement, IPointerEnterHandl
         callback?.Invoke();
     }
 
+    public float LastParryTime => m_lastParryTime;
     public Animator Animator => _characterAnimator;
     public SkillAnimationTriggers SkillAnimationTriggers => m_skillAnimationTriggers;
 }

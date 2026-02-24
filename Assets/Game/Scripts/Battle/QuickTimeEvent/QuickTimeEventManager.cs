@@ -16,7 +16,7 @@ public class QuickTimeEventManager : MonoBehaviour
     private Key m_keyPressed;
     private Queue<QuickTimeEventElementController> m_quickTimeEvents;
     private List<QuickTimeEventElementController.QuickTimeEventResultType> m_results;
-    private Action<List<QuickTimeEventElementController.QuickTimeEventResultType>> m_callback;
+    private Action<QuickTimeEventResult> m_callback;
 
     private void Awake()
     {
@@ -53,7 +53,7 @@ public class QuickTimeEventManager : MonoBehaviour
         }
     }
 
-    public void StartEvents(float qteTime, int amount, float interval, Action<List<QuickTimeEventElementController.QuickTimeEventResultType>> callback)
+    public void StartEvents(float qteTime, int amount, float interval, Action<QuickTimeEventResult> callback)
     {
         m_callback = callback;
         m_quickTimeEvents = new Queue<QuickTimeEventElementController>();
@@ -86,7 +86,7 @@ public class QuickTimeEventManager : MonoBehaviour
     {
         if (m_quickTimeEvents.Count == 0)
         {
-            m_callback?.Invoke(m_results);
+            m_callback?.Invoke(new QuickTimeEventResult(m_results));
         }
     }
 
