@@ -123,5 +123,11 @@ public class UIListDisplay : MonoBehaviour
     }
 
     public List<UIItemController> GetItems() => _controllers;
+
+    internal void SetItems(object skills)
+    {
+        throw new NotImplementedException();
+    }
+
     public Transform Parent => _itemParent;
 }

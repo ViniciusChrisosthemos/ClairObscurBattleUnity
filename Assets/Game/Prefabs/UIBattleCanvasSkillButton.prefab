@@ -645,11 +645,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7232629293540949877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfe39ab074ab2814ab35b3a5b0950748, type: 3}
+  m_Script: {fileID: 11500000, guid: bdf5ad6a9c3f5994eab739a6af1b9703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _txtSkillName: {fileID: 6852986384011190264}
-  _txtSkillDescription: {fileID: 1390676957327575899}
+  m_btnButton: {fileID: 8349022805385242306}
+  m_txtSkillName: {fileID: 6852986384011190264}
+  m_description: {fileID: 1390676957327575899}
 --- !u!114 &8349022805385242306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,19 +694,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6449173966261579942}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1766586533873467115}
-        m_TargetAssemblyTypeName: UIBattleCanvasSkillButtonView, Assembly-CSharp
-        m_MethodName: SelectItem
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &8600871788639095799
 GameObject:
   m_ObjectHideFlags: 0

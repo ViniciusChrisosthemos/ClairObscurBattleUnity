@@ -14,7 +14,7 @@ public class UIBattleCharacterView : UIItemController
     {
         _chraracterRuntime = obj as CharacterRuntime;
 
-        _imgCharacterFace.sprite = _chraracterRuntime.CharacterSO.CharacterIcon;
+        _imgCharacterFace.sprite = _chraracterRuntime.BaseCharacterData.CharacterIcon;
         _sliderHPBar.maxValue = _chraracterRuntime.MaxHP;
 
         UpdateHP();

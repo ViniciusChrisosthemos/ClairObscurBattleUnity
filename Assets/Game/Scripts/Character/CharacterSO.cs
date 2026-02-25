@@ -10,4 +10,7 @@ public class CharacterSO : ScriptableObject
     public int Agility;
 
     public List<SkillSO> Skills;
+
+    [Header("Model")]
+    public CharacterModelReferences ModelReferences;
 }

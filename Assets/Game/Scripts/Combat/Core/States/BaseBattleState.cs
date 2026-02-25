@@ -1,27 +1,13 @@
 using UnityEngine;
 
-public abstract class BaseBattleState : MonoBehaviour, IState
+public abstract class BaseBattleState : IState
 {
-    protected CombatManager CombatManager { get; private set; }
+    public CombatManager CombatManager { get; private set; }
 
-    private void Awake()
+    public BaseBattleState(CombatManager combatManager)
     {
-        HandleInternalAwake();
+        CombatManager = combatManager;
     }
-
-    private void Start()
-    {
-        HandleInternalStart();
-    }
-
-    public void Setup(CombatManager manager)
-    {
-        CombatManager = manager;
-    }
-
-    protected abstract void HandleInternalAwake();
-
-    protected abstract void HandleInternalStart();
 
     public abstract void Enter();
 

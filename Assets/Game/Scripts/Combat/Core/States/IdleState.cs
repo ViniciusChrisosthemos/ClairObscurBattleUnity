@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class IdleState : MonoBehaviour, IState
+public class IdleState : IState
 {
+
     public void Enter()
     {
 

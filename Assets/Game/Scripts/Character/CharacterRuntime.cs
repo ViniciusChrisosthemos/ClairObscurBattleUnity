@@ -5,14 +5,14 @@ using UnityEngine.Events;
 [Serializable]
 public class CharacterRuntime: ITimelineElement
 {
-    public CharacterSO CharacterSO;
+    public CharacterSO BaseCharacterData;
     public int MaxHP;
     public int CurrentHP;
     public int CurrentAgility;
 
     public CharacterRuntime(CharacterSO characterSO)
     {
-        CharacterSO = characterSO;
+        BaseCharacterData = characterSO;
         MaxHP = characterSO.MaxHealth;
         CurrentHP = MaxHP;
         CurrentAgility = characterSO.Agility;

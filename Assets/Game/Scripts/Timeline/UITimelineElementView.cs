@@ -12,10 +12,10 @@ public class UITimelineElementView : UIItemController
 
     protected override void HandleInit(object obj)
     {
-        var characterSpot = (CharacterSpot)obj;
+        var characterView = (BattleCharacterView)obj;
 
-        _imgCharacterIcon.sprite = characterSpot.CharacterRuntime.CharacterSO.CharacterIcon;
+        _imgCharacterIcon.sprite = characterView.BattleCharacter.CharacterRuntime.BaseCharacterData.CharacterIcon;
 
-        _imgBackground.color = characterSpot.IsPlayerCharacter ? _playerBackgroundColor : _enemyBackgroundColor;
+        _imgBackground.color = characterView.BattleCharacter.IsPlayer ? _playerBackgroundColor : _enemyBackgroundColor;
     }
 }

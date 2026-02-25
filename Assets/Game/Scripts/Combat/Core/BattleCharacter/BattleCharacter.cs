@@ -1,7 +1,9 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleCharacter : IBattleCharacter
+public class BattleCharacter : IBattleCharacter, ITimelineElement
 {
     public event Action<int, int> OnTakeDamageEvent;
     public event Action OnDieEvent;
@@ -9,8 +11,10 @@ public class BattleCharacter : IBattleCharacter
     public BattleCharacter(CharacterRuntime character, bool isPlayer)
     {
         IsPlayer = isPlayer;
-        BaseCharacter = character;
+        CharacterRuntime = character;
         CurrentHP = character.MaxHP;
+
+        Skills = character.BaseCharacterData.Skills;
     }
 
     public bool IsAlive()
@@ -30,9 +34,21 @@ public class BattleCharacter : IBattleCharacter
         }
     }
 
+    public int GetPriority()
+    {
+        return CharacterRuntime.GetPriority();
+    }
+
+    public bool IsActive()
+    {
+        return CharacterRuntime.IsActive();
+    }
+
+    public List<SkillSO> Skills { get; private set; }
+
     public int CurrentHP { get; private set; }
 
     public bool IsPlayer { get; private set; }
 
-    public CharacterRuntime BaseCharacter { get; private set; }
+    public CharacterRuntime CharacterRuntime { get; private set; }
 }

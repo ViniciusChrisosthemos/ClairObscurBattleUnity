@@ -7,7 +7,7 @@ public class SkillExecutor : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private QuickTimeEventManager m_quickTimeEventManager;
-    [SerializeField] private BattleCameraController m_battleCameraController;
+    [SerializeField] private BattleCameraManager m_battleCameraManager;
 
     [Header("Parameters")]
     [SerializeField] private float m_timeAfterMoveToLocation = 0.5f;
@@ -45,13 +45,13 @@ public class SkillExecutor : MonoBehaviour
 
         UnbindTriggerEvents(battleCharacter);
 
-        m_battleCameraController.Reset();
+        m_battleCameraManager.Reset();
         m_battleCharacterView.ResetPosition();
     }
 
     private void HandleAnimationStart()
     {
-        m_battleCameraController.SetParent(m_battleCharacterView.AnimatorCameraPivot);
+        m_battleCameraManager.SetParent(m_battleCharacterView.AnimationCameraPivot);
     }
 
     private void HandleAnimationEnd()

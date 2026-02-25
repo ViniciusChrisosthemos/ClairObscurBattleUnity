@@ -1,37 +1,54 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerTurnState : BaseBattleState
 {
-    [Header("States")]
-    [SerializeField] private IdleState m_idleState;
-    [SerializeField] private PlayerTurnSelectActionState m_selectActionState;
+    private SkillSO m_selectedSkill;
 
-    private StateMachineController m_stateMachinecontroller;
-
-    protected override void HandleInternalAwake()
-    {
-        m_stateMachinecontroller = new StateMachineController();
-
-        m_stateMachinecontroller.Setup(m_idleState);
-    }
-
-    protected override void HandleInternalStart()
-    {
-        m_selectActionState.Setup(CombatManager);
-    }
+    public PlayerTurnState(CombatManager combatManager) : base(combatManager) { }
 
     public override void Enter()
     {
-        m_stateMachinecontroller.ChangeState(m_selectActionState);
+        var battleCharacterView = CombatManager.CurrentCharacterTurn;
+
+        CombatManager.UIBattleHUDView.SetCharacter(battleCharacterView, HandleSkillSelected, HandlePassTurnSelected);
+        CombatManager.BattleCameraManager.MoveCameraTo(battleCharacterView.ActionSelectionCameraSpot);
+        CombatManager.TargetSelectionManager.OnTargetSelected.AddListener(HandleTargetSelected);
     }
 
     public override void Exit()
     {
-
+        CombatManager.TargetSelectionManager.OnTargetSelected.RemoveListener(HandleTargetSelected);
+        CombatManager.UIBattleHUDView.Deactivate();
     }
 
     public override void UpdateState()
     {
 
+    }
+
+    private void HandlePassTurnSelected()
+    {
+        CombatManager.NextTurn();
+    }
+
+    private void HandleTargetSelected(List<BattleCharacterView> targets)
+    {
+        CombatManager.ExecuteSkill(m_selectedSkill, targets);
+    }
+
+    private void HandleSkillSelected(SkillSO skill)
+    {
+        m_selectedSkill = skill;
+
+        if (skill.TargetType == SkillSO.SkillTargetType.AllEnemies)
+        {
+            CombatManager.TargetSelectionManager.SetAlltargetSelection();
+        }
+        else
+        {
+            CombatManager.TargetSelectionManager.SetSingleTargetSelection();
+        }
+
+        CombatManager.BattleCameraManager.MoveCameraTo(CombatManager.TargetSelectionManager.TargetSelectionCameraPivot);
     }
 }
