@@ -23,15 +23,22 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
     [SerializeField] private string m_parryTriggerName = "Parry";
     [SerializeField] private string m_runBoolName = "Run";
 
+    [Header("Parameters")]
+    [SerializeField] private float m_parryTime = 0.3f;
+    [SerializeField] private float m_parryInterval = 1.5f;
+
     [Header("Events")]
     public UnityEvent<BattleCharacterView> OnCharacterHoverEnter;
     public UnityEvent<BattleCharacterView> OnCharacterHoverExit;
     public UnityEvent<BattleCharacterView> OnCharacterSelected;
+    public UnityEvent<int> OnTakeDamage;
 
 
     private Animator m_characterAnimator;
     private SkillAnimationTriggers m_skillAnimationTriggers;
     private Transform m_animationCameraPivot;
+
+    private float m_lastParryTime;
 
     public void Setup(BattleCharacter battleCharacter)
     {
@@ -68,7 +75,7 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         }
 
         m_modelTransform.position = endPosition;
-        m_modelTransform.rotation = Quaternion.identity;
+        m_modelTransform.rotation = location.rotation;
 
         m_characterAnimator.SetBool(m_runBoolName, false);
     }
@@ -94,17 +101,28 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         m_characterAnimator.SetTrigger(m_dodgeTriggerName);
     }
 
-    public void TakeDamage(int damage)
+    public DamageResult TakeDamage(int damage)
     {
-        BattleCharacter.TakeDamage(damage);
-
-        if (!BattleCharacter.IsAlive())
+        if (Time.time - m_lastParryTime <= m_parryTime)
         {
-            m_characterAnimator.SetTrigger(m_dieTriggerName);
+            return new DamageResult(0, true);
         }
         else
         {
-            m_characterAnimator.SetTrigger(m_takeDamageTriggerName);
+            BattleCharacter.TakeDamage(damage);
+
+            if (!BattleCharacter.IsAlive())
+            {
+                m_characterAnimator.SetTrigger(m_dieTriggerName);
+            }
+            else
+            {
+                m_characterAnimator.SetTrigger(m_takeDamageTriggerName);
+            }
+
+            OnTakeDamage?.Invoke(damage);
+
+            return new DamageResult(damage, false);
         }
     }
 
@@ -115,7 +133,7 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
 
     public int GetPriority()
     {
-        return BattleCharacter.CharacterRuntime.GetPriority();
+        return BattleCharacter.CharacterRuntime.Agility;
     }
 
     public bool IsActive()
@@ -136,6 +154,26 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
     public void OnPointerExit(PointerEventData eventData)
     {
         OnCharacterHoverExit?.Invoke(this);
+    }
+
+    private void HandleParryEvent()
+    {
+        if (Time.time - m_lastParryTime >= m_parryInterval)
+        {
+            m_lastParryTime = Time.time;
+
+            m_characterAnimator.SetTrigger(m_parryTriggerName);
+        }
+    }
+
+    public void EnableParry()
+    {
+        InputManager.Instance.OnParryEvent.AddListener(HandleParryEvent);
+    }
+
+    public void DisableParry()
+    {
+        InputManager.Instance.OnParryEvent.RemoveListener(HandleParryEvent);
     }
 
     public Transform ModelTransform => m_modelTransform;

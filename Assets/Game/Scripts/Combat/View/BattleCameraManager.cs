@@ -13,7 +13,7 @@ public class BattleCameraManager : MonoBehaviour
 
     private Transform m_prevCameraParent;
 
-    private IEnumerator AnimateCameraMovementCoroutine(Transform target, float duration)
+    public IEnumerator AnimateCameraMovementCoroutine(Transform target, float duration)
     {
         var accumTime = 0f;
 
@@ -52,5 +52,10 @@ public class BattleCameraManager : MonoBehaviour
         m_camera.SetParent(m_prevCameraParent, false);
         m_camera.localPosition = Vector3.zero;
         m_camera.localRotation = Quaternion.identity;
+    }
+
+    public Transform GetCameraTransform()
+    {
+        return m_camera;
     }
 }

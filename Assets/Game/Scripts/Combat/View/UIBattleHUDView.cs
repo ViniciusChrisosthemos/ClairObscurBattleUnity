@@ -9,6 +9,9 @@ public class UIBattleHUDView : MonoBehaviour
     [Header("Managers")]
     [SerializeField] private BattleCameraManager m_battleCameraManager;
 
+    [Header("HUD")]
+    [SerializeField] private UIListDisplay m_playerCharacterListDisplay;
+
     [Header("Player Actions References")]
     [SerializeField] private GameObject m_actionView;
     [SerializeField] private Transform m_worldCanvasView;
@@ -27,6 +30,11 @@ public class UIBattleHUDView : MonoBehaviour
     {
         m_btnRollDices.onClick.AddListener(HandleRollDiceEvent);
         m_passTurn.onClick.AddListener(HandlePassTurn);
+    }
+
+    public void Setup(CombatManager combatManager)
+    {
+        m_playerCharacterListDisplay.SetItems(combatManager.PlayerViews, null);
     }
 
     private void HandleRollDiceEvent()

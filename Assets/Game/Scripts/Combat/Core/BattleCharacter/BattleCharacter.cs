@@ -36,17 +36,19 @@ public class BattleCharacter : IBattleCharacter, ITimelineElement
 
     public int GetPriority()
     {
-        return CharacterRuntime.GetPriority();
+        return CharacterRuntime.Agility;
     }
 
     public bool IsActive()
     {
-        return CharacterRuntime.IsActive();
+        return CurrentHP > 0;
     }
 
     public List<SkillSO> Skills { get; private set; }
 
     public int CurrentHP { get; private set; }
+
+    public int MaxpHP => CharacterRuntime.MaxHP;
 
     public bool IsPlayer { get; private set; }
 

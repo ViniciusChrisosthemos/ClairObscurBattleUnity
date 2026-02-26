@@ -1,7 +1,10 @@
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -12,6 +15,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private BattleEnvironmentManager m_battleEnvironmentManager;
     [SerializeField] private BattleCameraManager m_battleCameraManager;
     [SerializeField] private UIBattleHUDView m_battleHUDView;
+    [SerializeField] private UIEndBattleView m_uiEndBattleView;
     [SerializeField] private TargetSeletionManager m_targetSelectionManager;
     [SerializeField] private BattleSkillAnimationManager m_battleSkillAnimationManager;
 
@@ -67,12 +71,19 @@ public class CombatManager : MonoBehaviour
 
         m_targetSelectionManager.Setup(m_battleEnvironmentManager.PlayerBattleViews, m_battleEnvironmentManager.EnemyBattleViews);
 
+        m_battleHUDView.Setup(this);
+
         NextTurn();
     }
 
     public void NextTurn()
     {
-        var character = TurnManager.Next();
+        BattleCharacter character;
+
+        do
+        {
+            character = TurnManager.Next();
+        } while (!character.IsActive());
 
         if (character.IsPlayer)
         {
@@ -98,17 +109,38 @@ public class CombatManager : MonoBehaviour
 
     public BattleCharacterView GetCharacterView(BattleCharacter character) => m_battleEnvironmentManager.GetCharacterView(character);
 
+    public void EnableParry()
+    {
+        m_battleEnvironmentManager.PlayerBattleViews.ForEach(view => view.EnableParry());
+    }
+
+    public void DisableParry()
+    {
+        m_battleEnvironmentManager.PlayerBattleViews.ForEach ((view) => view.DisableParry());
+    }
+
+    public void EndBattle()
+    {
+        Debug.Log("CombatManager Endbattle");
+        m_stateMachineController.ChangeState(new EndBattleState(this));
+    }
+
+    public BattleResult GetBattleResult()
+    {
+        var playerWin = Context.PlayerBattleCharacters.Any(c => c.IsAlive());
+
+        return new BattleResult(playerWin);
+    }
+
     public BattleCharacterView CurrentCharacterTurn => GetCharacterView(TurnManager.Current);
-
     public BattleCameraManager BattleCameraManager => m_battleCameraManager;
-
     public UIBattleHUDView UIBattleHUDView => m_battleHUDView;
-
+    public UIEndBattleView UIEndBattleView => m_uiEndBattleView;
     public TargetSeletionManager TargetSelectionManager => m_targetSelectionManager;
-
     public BattleSkillAnimationManager BattleSkillAnimationManager => m_battleSkillAnimationManager;
+    public List<BattleCharacterView> PlayerViews => m_battleEnvironmentManager.PlayerBattleViews;
 
     public CombatContext Context { get; private set; }
-    
     public TurnManager TurnManager { get; private set; }
+    public bool HasEnd => !(Context.PlayerBattleCharacters.Any(c => c.IsAlive()) && Context.EnemyBattleCharacters.Any(c => c.IsAlive()));
 }

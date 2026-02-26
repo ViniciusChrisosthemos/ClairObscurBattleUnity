@@ -20,7 +20,7 @@ public class SkillExecutionState : BaseBattleState
 
     public override void Enter()
     {
-        CombatManager.BattleSkillAnimationManager.PlaySkill(m_characterView, m_skillSO, m_targets, m_callback);
+        CombatManager.BattleSkillAnimationManager.PlaySkill(CombatManager, m_characterView, m_skillSO, m_targets, m_callback);
     }
 
     public override void Exit()

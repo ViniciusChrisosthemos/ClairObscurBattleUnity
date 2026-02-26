@@ -3,35 +3,17 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [Serializable]
-public class CharacterRuntime: ITimelineElement
+public class CharacterRuntime
 {
-    public CharacterSO BaseCharacterData;
-    public int MaxHP;
-    public int CurrentHP;
-    public int CurrentAgility;
+    public CharacterSO BaseCharacterData {  get; private set; }
+    public int MaxHP {  get; private set; }
+    public int Agility {  get; private set; }
 
     public CharacterRuntime(CharacterSO characterSO)
     {
         BaseCharacterData = characterSO;
         MaxHP = characterSO.MaxHealth;
-        CurrentHP = MaxHP;
-        CurrentAgility = characterSO.Agility;
+        Agility = characterSO.Agility;
     }
 
-    public bool IsAlive() => CurrentHP > 0;
-
-    public int GetPriority()
-    {
-        return CurrentAgility;
-    }
-
-    public bool IsActive()
-    {
-        return IsAlive();
-    }
-
-    public void TakeDamage(int damage)
-    {
-        CurrentHP -= damage;
-    }
 }

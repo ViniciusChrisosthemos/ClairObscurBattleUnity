@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Red
   CharacterIcon: {fileID: -280103976, guid: c808511794678714789b55236aa3375d, type: 3}
-  MaxHealth: 450
+  MaxHealth: 50
   Agility: 2
   Skills:
   - {fileID: 11400000, guid: c0741d3e4eecd0f4e80f618ebc67cdd5, type: 2}
