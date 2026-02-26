@@ -9,16 +9,21 @@ public class EndBattleState : BaseBattleState
 
     public override void Enter()
     {
-        CombatManager.UIEndBattleView.Setup(CombatManager.GetBattleResult());
+        CombatManager.UIEndBattleView.Setup(CombatManager.GetBattleResult(), HandlePlayAgain);
     }
 
     public override void Exit()
     {
-
+        CombatManager.UIEndBattleView.Close();
     }
 
     public override void UpdateState()
     {
 
+    }
+
+    private void HandlePlayAgain()
+    {
+        CombatManager.StartCombat();
     }
 }

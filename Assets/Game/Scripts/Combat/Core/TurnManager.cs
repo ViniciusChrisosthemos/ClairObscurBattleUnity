@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TurnManager
 {
@@ -21,6 +23,13 @@ public class TurnManager
         Current = m_timeLineController.Dequeue();
 
         return Current;
+    }
+
+    public List<BattleCharacter> GetCharacterQueue()
+    {
+        var queue = m_timeLineController.GetTimeline();
+
+        return queue.Where(c => c.IsActive()).ToList();
     }
 
     public BattleCharacter Current {  get; private set; }

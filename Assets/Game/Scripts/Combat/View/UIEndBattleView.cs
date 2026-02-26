@@ -1,12 +1,15 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIEndBattleView : MonoBehaviour
 {
     [SerializeField] private GameObject m_view;
     [SerializeField] private TextMeshProUGUI m_txtResult;
     [SerializeField] private BattleCameraManager m_battleCameraManager;
+    [SerializeField] private Button m_btnPlayAgain;
 
     [SerializeField] private Transform m_cameraPivot;
     [SerializeField] private float m_forwardDistance = 1f;
@@ -14,14 +17,17 @@ public class UIEndBattleView : MonoBehaviour
 
     private void Awake()
     {
-        m_view.SetActive(false);
+        Close();
     }
 
-    public void Setup(BattleResult battleResult)
+    public void Setup(BattleResult battleResult, Action callback)
     {
         m_txtResult.text = battleResult.PlayerWin ? "Player Win" : "Player Lose";
 
         StartCoroutine(AnimteScreenCoroutine());
+
+        m_btnPlayAgain.onClick.RemoveAllListeners();
+        m_btnPlayAgain.onClick.AddListener(() => callback?.Invoke());
     }
 
     private IEnumerator AnimteScreenCoroutine()
@@ -36,5 +42,10 @@ public class UIEndBattleView : MonoBehaviour
 
 
         m_view.SetActive(true);
+    }
+
+    public void Close()
+    {
+        m_view.SetActive(false);
     }
 }

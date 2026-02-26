@@ -11,6 +11,7 @@ public class UIBattleHUDView : MonoBehaviour
 
     [Header("HUD")]
     [SerializeField] private UIListDisplay m_playerCharacterListDisplay;
+    [SerializeField] private UIListDisplay m_timelineListDisplay;
 
     [Header("Player Actions References")]
     [SerializeField] private GameObject m_actionView;
@@ -26,6 +27,8 @@ public class UIBattleHUDView : MonoBehaviour
     private Action m_onPassTurnCallback;
     private Action<SkillSO> m_onSkillSelectedCallback;
 
+    private CombatManager m_combatManager;
+
     private void Awake()
     {
         m_btnRollDices.onClick.AddListener(HandleRollDiceEvent);
@@ -34,7 +37,19 @@ public class UIBattleHUDView : MonoBehaviour
 
     public void Setup(CombatManager combatManager)
     {
+        m_combatManager = combatManager;
+
         m_playerCharacterListDisplay.SetItems(combatManager.PlayerViews, null);
+
+        combatManager.OnTurnChanged.AddListener(HandleTurnChanged);
+    }
+
+    private void HandleTurnChanged(BattleCharacter character)
+    {
+        var queue = m_combatManager.TurnManager.GetCharacterQueue();
+        queue.Insert(0, character);
+
+        m_timelineListDisplay.SetItems(queue, null);
     }
 
     private void HandleRollDiceEvent()

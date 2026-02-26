@@ -10,8 +10,23 @@ public class BattleCameraManager : MonoBehaviour
 
     [Header("Animation Parameters")]
     [SerializeField] private float _cameraMoveDuration = 1f;
+    
+    private Transform m_cameraTarget;
+    private bool m_isFollowing = false;
 
-    private Transform m_prevCameraParent;
+    private void Awake()
+    {
+        m_cameraTarget = m_camera;
+    }
+
+    private void Update()
+    {
+        if (m_isFollowing)
+        {
+            m_camera.position = m_cameraTarget.position;
+            m_camera.rotation = m_cameraTarget.rotation;
+        }
+    }
 
     public IEnumerator AnimateCameraMovementCoroutine(Transform target, float duration)
     {
@@ -35,23 +50,19 @@ public class BattleCameraManager : MonoBehaviour
 
     public void MoveCameraTo(Transform target)
     {
+        StopFollow();
         StartCoroutine(AnimateCameraMovementCoroutine(target, _cameraMoveDuration));
     }
-
-    public void SetParent(Transform newParent)
+    
+    public void FollowTarget(Transform newParent)
     {
-        m_prevCameraParent = m_camera.parent;
-
-        m_camera.SetParent(newParent, false);
-        m_camera.localPosition = Vector3.zero;
-        m_camera.localRotation = Quaternion.identity;
+        m_cameraTarget = newParent;
+        m_isFollowing = true;
     }
 
-    public void Reset()
+    public void StopFollow()
     {
-        m_camera.SetParent(m_prevCameraParent, false);
-        m_camera.localPosition = Vector3.zero;
-        m_camera.localRotation = Quaternion.identity;
+        m_isFollowing = false;
     }
 
     public Transform GetCameraTransform()

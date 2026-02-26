@@ -19,6 +19,9 @@ public class BattleEnvironmentManager : MonoBehaviour
 
     public void Setup(List<BattleCharacter> playerBattleCharacters, List<BattleCharacter> enemiesBattleCharacters)
     {
+        m_playerCharacterParent.ClearChilds();
+        m_enemyCharacterParent.ClearChilds();
+
         PlayerBattleViews = InstantiateBattleViews(playerBattleCharacters, m_playerCharacterParent);
         EnemyBattleViews = InstantiateBattleViews(enemiesBattleCharacters, m_enemyCharacterParent);
 

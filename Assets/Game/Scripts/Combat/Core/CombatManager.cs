@@ -45,10 +45,7 @@ public class CombatManager : MonoBehaviour
     {
         if (m_debug)
         {
-            var playerCharacters = m_playerCharacters.Select(c => new CharacterRuntime(c)).ToList();
-            var enemyCharacters = m_enemyCharacters.Select(c => new CharacterRuntime(c)).ToList();
-
-            StartCombat(playerCharacters, enemyCharacters);
+            StartCombat();
         }
     }
 
@@ -130,6 +127,14 @@ public class CombatManager : MonoBehaviour
         var playerWin = Context.PlayerBattleCharacters.Any(c => c.IsAlive());
 
         return new BattleResult(playerWin);
+    }
+
+    public void StartCombat()
+    {
+        var playerCharacters = m_playerCharacters.Select(c => new CharacterRuntime(c)).ToList();
+        var enemyCharacters = m_enemyCharacters.Select(c => new CharacterRuntime(c)).ToList();
+
+        StartCombat(playerCharacters, enemyCharacters);
     }
 
     public BattleCharacterView CurrentCharacterTurn => GetCharacterView(TurnManager.Current);

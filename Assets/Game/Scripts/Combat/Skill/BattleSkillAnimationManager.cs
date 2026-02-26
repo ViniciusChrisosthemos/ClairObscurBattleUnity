@@ -15,8 +15,8 @@ public class BattleSkillAnimationManager : MonoBehaviour
     public float m_qteInterval = 0.45f;
     public int m_qteAmount = 2;
 
-    public Transform m_camera;
-    public Transform m_mainCameraPivot;
+    [Header("References")]
+    [SerializeField] private BattleCameraManager m_battleCameraManager;
 
     [Header("Paramters")]
     [SerializeField] private float m_timeSlowDurantionOnBattleEnd = 2f;
@@ -73,14 +73,12 @@ public class BattleSkillAnimationManager : MonoBehaviour
 
     private void HandleAnimationStart()
     {
-        m_camera.SetParent(m_characterView.AnimationCameraPivot, false);
-        m_camera.localPosition = Vector3.zero;
-        m_camera.localRotation = Quaternion.identity;
+        m_battleCameraManager.FollowTarget(m_characterView.AnimationCameraPivot);
     }
 
     private async void HandleAnimationEnd()
     {
-        m_camera.SetParent(m_mainCameraPivot, false);
+        m_battleCameraManager.StopFollow();
 
         await Task.Delay(1);
 
@@ -122,6 +120,8 @@ public class BattleSkillAnimationManager : MonoBehaviour
                 if (m_combatManager.HasEnd)
                 {
                     UnbindAnimationTriggers();
+
+                    m_battleCameraManager.StopFollow();
 
                     var actors = new List<BattleCharacterView>();
 
