@@ -9,7 +9,7 @@ public class CharacterSO : ScriptableObject
     public int MaxHealth;
     public int Agility;
 
-    public List<SkillSO> Skills;
+    public List<BaseSkillSO> Skills;
 
     [Header("Model")]
     public CharacterModelReferences ModelReferences;

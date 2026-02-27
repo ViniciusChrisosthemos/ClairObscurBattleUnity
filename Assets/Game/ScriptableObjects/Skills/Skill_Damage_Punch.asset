@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4585955339e6f8643a26040bce3d9928, type: 3}
-  m_Name: Skill_D
+  m_Script: {fileID: 11500000, guid: eadc80982ba192749ad0b3f89fd0cc6a, type: 3}
+  m_Name: Skill_Damage_Punch
   m_EditorClassIdentifier: 
-  SkillName: Skill D
-  Icon: {fileID: 0}
-  Description: Stun an enemy for 2 turns
-  DicesRequired: []
-  TargetType: 1
-  AnimationTrigger: Attack
+  m_name: Punch
+  m_icon: {fileID: 0}
+  m_description: Deal 50 damage
+  m_dicesRequired: []
+  m_targetType: 1
+  m_animationTrigger: Attack
+  m_damage: 50
+  m_bonusForPerfectQTE: 1.5

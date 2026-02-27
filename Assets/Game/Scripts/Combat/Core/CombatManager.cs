@@ -94,7 +94,7 @@ public class CombatManager : MonoBehaviour
         OnTurnChanged?.Invoke(character);
     }
 
-    public void ExecuteSkill(SkillSO skillSO, List<BattleCharacterView> views)
+    public void ExecuteSkill(BaseSkillSO skillSO, List<BattleCharacterView> views)
     {
         m_stateMachineController.ChangeState(new SkillExecutionState(this, CurrentCharacterTurn, skillSO, views, HandleSkillFinished));
     }

@@ -51,6 +51,9 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         m_characterAnimator = modelReference.Animator;
         m_skillAnimationTriggers = modelReference.SkillAnimationTriggers;
         m_animationCameraPivot = modelReference.AnimationCameraPivot;
+
+        BattleCharacter.OnDieEvent += HandleCharacterDie;
+        BattleCharacter.OnTakeDamageEvent += HandleCharacterTakeDamage;
     }
 
     public async Task MoveTo(Transform location, float speed = 0.5f)
@@ -101,31 +104,6 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         m_characterAnimator.SetTrigger(m_dodgeTriggerName);
     }
 
-    public DamageResult TakeDamage(int damage)
-    {
-        if (Time.time - m_lastParryTime <= m_parryTime)
-        {
-            return new DamageResult(0, true);
-        }
-        else
-        {
-            BattleCharacter.TakeDamage(damage);
-
-            if (!BattleCharacter.IsAlive())
-            {
-                m_characterAnimator.SetTrigger(m_dieTriggerName);
-            }
-            else
-            {
-                m_characterAnimator.SetTrigger(m_takeDamageTriggerName);
-            }
-
-            OnTakeDamage?.Invoke(damage);
-
-            return new DamageResult(damage, false);
-        }
-    }
-
     public void PlaySkillAnimation(string skillAnimationTrigger)
     {
         m_characterAnimator.SetTrigger(skillAnimationTrigger);
@@ -166,6 +144,18 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         }
     }
 
+    private void HandleCharacterDie()
+    {
+        m_characterAnimator.SetTrigger(m_dieTriggerName);
+    }
+
+    private void HandleCharacterTakeDamage(int damageTaken, int currentHP)
+    {
+        m_characterAnimator.SetTrigger(m_takeDamageTriggerName);
+
+        OnTakeDamage?.Invoke(damageTaken);
+    }
+
     public void EnableParry()
     {
         InputManager.Instance.OnParryEvent.AddListener(HandleParryEvent);
@@ -176,6 +166,7 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         InputManager.Instance.OnParryEvent.RemoveListener(HandleParryEvent);
     }
 
+    public bool HasParryIt => (Time.time - m_lastParryTime) < m_parryInterval;
     public Transform ModelTransform => m_modelTransform;
     public Transform ActionSelectionCameraSpot => m_actionSelectionCameraSpot;
     public Transform SkillSelectionCameraSpot => m_skillSelectionCameraSpot;

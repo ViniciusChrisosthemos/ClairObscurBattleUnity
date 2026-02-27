@@ -25,7 +25,7 @@ public class UIBattleHUDView : MonoBehaviour
 
     private BattleCharacterView m_battleCharacterView;
     private Action m_onPassTurnCallback;
-    private Action<SkillSO> m_onSkillSelectedCallback;
+    private Action<BaseSkillSO> m_onSkillSelectedCallback;
 
     private CombatManager m_combatManager;
 
@@ -70,7 +70,7 @@ public class UIBattleHUDView : MonoBehaviour
         m_onPassTurnCallback?.Invoke();
     }
 
-    public void SetCharacter(BattleCharacterView characterView, Action<SkillSO> skillSelectedCallback, Action passTurnCallback)
+    public void SetCharacter(BattleCharacterView characterView, Action<BaseSkillSO> skillSelectedCallback, Action passTurnCallback)
     {
         m_battleCharacterView = characterView;
 
@@ -87,7 +87,7 @@ public class UIBattleHUDView : MonoBehaviour
 
     private void HandleSkillSelected(UIItemController controller)
     {
-        var skill = controller.GetItem<SkillSO>();
+        var skill = controller.GetItem<BaseSkillSO>();
 
         m_onSkillSelectedCallback?.Invoke(skill);
     }

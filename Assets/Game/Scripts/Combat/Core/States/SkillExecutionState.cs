@@ -6,11 +6,11 @@ using UnityEngine;
 public class SkillExecutionState : BaseBattleState
 {
     private BattleCharacterView m_characterView;
-    private SkillSO m_skillSO;
+    private BaseSkillSO m_skillSO;
     private List<BattleCharacterView> m_targets;
     private Action m_callback;
 
-    public SkillExecutionState(CombatManager combatManager, BattleCharacterView character, SkillSO skill, List<BattleCharacterView> targets, Action callback) : base(combatManager)
+    public SkillExecutionState(CombatManager combatManager, BattleCharacterView character, BaseSkillSO skill, List<BattleCharacterView> targets, Action callback) : base(combatManager)
     {
         m_characterView = character;
         m_skillSO = skill;

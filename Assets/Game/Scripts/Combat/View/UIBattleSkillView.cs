@@ -10,7 +10,7 @@ public class UIBattleSkillView : UIItemController
 
     protected override void HandleInit(object obj)
     {
-        var skill = obj as SkillSO;
+        var skill = obj as BaseSkillSO;
 
         m_txtSkillName.text = skill.SkillName;
         m_description.text = skill.Description;

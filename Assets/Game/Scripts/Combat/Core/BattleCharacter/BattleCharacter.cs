@@ -26,11 +26,13 @@ public class BattleCharacter : IBattleCharacter, ITimelineElement
     {
         CurrentHP = Mathf.Max(0, CurrentHP - damage);
         
-        OnTakeDamageEvent?.Invoke(damage, CurrentHP);
-
         if (CurrentHP == 0)
         {
             OnDieEvent?.Invoke();
+        }
+        else
+        {
+            OnTakeDamageEvent?.Invoke(damage, CurrentHP);
         }
     }
 
@@ -44,7 +46,7 @@ public class BattleCharacter : IBattleCharacter, ITimelineElement
         return CurrentHP > 0;
     }
 
-    public List<SkillSO> Skills { get; private set; }
+    public List<BaseSkillSO> Skills { get; private set; }
 
     public int CurrentHP { get; private set; }
 

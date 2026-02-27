@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class PlayerTurnState : BaseBattleState
 {
-    private SkillSO m_selectedSkill;
+    private BaseSkillSO m_selectedSkill;
 
     public PlayerTurnState(CombatManager combatManager) : base(combatManager) { }
 
@@ -36,11 +36,11 @@ public class PlayerTurnState : BaseBattleState
         CombatManager.ExecuteSkill(m_selectedSkill, targets);
     }
 
-    private void HandleSkillSelected(SkillSO skill)
+    private void HandleSkillSelected(BaseSkillSO skill)
     {
         m_selectedSkill = skill;
 
-        if (skill.TargetType == SkillSO.SkillTargetType.AllEnemies)
+        if (skill.TargetType == BaseSkillSO.SkillTargetType.AllEnemies)
         {
             CombatManager.TargetSelectionManager.SetAlltargetSelection();
         }

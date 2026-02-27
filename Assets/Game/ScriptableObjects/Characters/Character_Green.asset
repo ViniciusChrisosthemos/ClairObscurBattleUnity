@@ -14,11 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Green
   CharacterIcon: {fileID: 320352479, guid: 00215a2cc721c1549b09cfeb933fa4b8, type: 3}
-  MaxHealth: 50
+  MaxHealth: 100
   Agility: 1
   Skills:
-  - {fileID: 11400000, guid: c0741d3e4eecd0f4e80f618ebc67cdd5, type: 2}
-  - {fileID: 11400000, guid: eb0c58d45a71a82488eadcaea6ac8390, type: 2}
-  - {fileID: 11400000, guid: f608e80f607f6dc4f8c46370a3fd8acc, type: 2}
-  - {fileID: 11400000, guid: 6f30393e9e95b064d86d6d8d96146983, type: 2}
+  - {fileID: 11400000, guid: 146cb3edf90252747837ccf41e6a4ee9, type: 2}
   ModelReferences: {fileID: -4684021117000273469, guid: 7c9cbccf155e1d345aa7cf3cae95e8f0, type: 3}

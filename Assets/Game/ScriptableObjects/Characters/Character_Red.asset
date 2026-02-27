@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Red
   CharacterIcon: {fileID: -280103976, guid: c808511794678714789b55236aa3375d, type: 3}
-  MaxHealth: 50
+  MaxHealth: 100
   Agility: 2
   Skills:
-  - {fileID: 11400000, guid: c0741d3e4eecd0f4e80f618ebc67cdd5, type: 2}
-  - {fileID: 11400000, guid: f608e80f607f6dc4f8c46370a3fd8acc, type: 2}
-  - {fileID: 11400000, guid: 6f30393e9e95b064d86d6d8d96146983, type: 2}
+  - {fileID: 11400000, guid: 146cb3edf90252747837ccf41e6a4ee9, type: 2}
   ModelReferences: {fileID: -4684021117000273469, guid: 4d652377bc3a0fb488610aed4221bc19, type: 3}

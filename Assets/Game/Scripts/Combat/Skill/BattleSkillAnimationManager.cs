@@ -29,14 +29,14 @@ public class BattleSkillAnimationManager : MonoBehaviour
     [SerializeField] private BattleDamageNotificationController m_damageVFX;
 
     private CombatManager m_combatManager;
-    private SkillSO m_skill;
+    private BaseSkillSO m_skill;
     private BattleCharacterView m_characterView;
     private BattleCharacterView m_enemyCharacterView;
 
     private Action m_callback;
     private QuickTimeEventResult m_quickTimeEventResult;
 
-    public async void PlaySkill(CombatManager manager, BattleCharacterView character, SkillSO skill, List<BattleCharacterView> targets, Action callback)
+    public async void PlaySkill(CombatManager manager, BattleCharacterView character, BaseSkillSO skill, List<BattleCharacterView> targets, Action callback)
     {
         m_callback = callback;
 
@@ -99,24 +99,21 @@ public class BattleSkillAnimationManager : MonoBehaviour
         }
         else
         {
-            var damange = 50;
+            var targets = new List<BattleCharacter>() { m_enemyCharacterView.BattleCharacter };
+            var skillResult = m_skill.Execute(m_characterView.BattleCharacter, targets, m_quickTimeEventResult);
 
-            var damageResult = m_enemyCharacterView.TakeDamage(damange);
-
-            if (damageResult.HasParryIt)
+            if (skillResult.HasParryIt)
             {
                 var instance = Instantiate(m_parryVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
             }
             else
             {
                 var instance = Instantiate(m_damageVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
-                instance.SetContent(damange);
+                instance.SetContent(skillResult.DamageDone);
             }
 
-            Debug.Log($"Executa Skill | Enemy is Alive? {!m_enemyCharacterView.BattleCharacter.IsAlive()}");
             if (!m_enemyCharacterView.BattleCharacter.IsAlive())
             {
-                Debug.Log($"   Is Battle Over? {m_combatManager.HasEnd}");
                 if (m_combatManager.HasEnd)
                 {
                     UnbindAnimationTriggers();
@@ -146,7 +143,6 @@ public class BattleSkillAnimationManager : MonoBehaviour
 
             currentSpeedAnimation = (1 - (accumTime / duration)) * m_startTimeScale;
 
-            Debug.Log($"   {currentSpeedAnimation}");
             accumTime += Time.deltaTime;
 
             yield return null;

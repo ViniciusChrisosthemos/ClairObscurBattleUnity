@@ -9,7 +9,8 @@ public class BattleEnvironmentManager : MonoBehaviour
     [SerializeField] private Transform m_enemyCharacterParent;
 
     [Header("Prefabs")]
-    [SerializeField] private BattleCharacterView m_battleCharacterViewPrefab;
+    [SerializeField] private BattleCharacterView m_playerBattleCharacterViewPrefab;
+    [SerializeField] private BattleCharacterView m_enemyBattleCharacterViewPrefab;
 
     [Header("Paramters")]
     [SerializeField] private Vector3 m_spacing;
@@ -22,8 +23,8 @@ public class BattleEnvironmentManager : MonoBehaviour
         m_playerCharacterParent.ClearChilds();
         m_enemyCharacterParent.ClearChilds();
 
-        PlayerBattleViews = InstantiateBattleViews(playerBattleCharacters, m_playerCharacterParent);
-        EnemyBattleViews = InstantiateBattleViews(enemiesBattleCharacters, m_enemyCharacterParent);
+        PlayerBattleViews = InstantiateBattleViews(playerBattleCharacters, m_playerBattleCharacterViewPrefab, m_playerCharacterParent);
+        EnemyBattleViews = InstantiateBattleViews(enemiesBattleCharacters, m_enemyBattleCharacterViewPrefab, m_enemyCharacterParent);
 
         m_battleCharacterViewDict = new Dictionary<BattleCharacter, BattleCharacterView>();
 
@@ -31,7 +32,7 @@ public class BattleEnvironmentManager : MonoBehaviour
         foreach (var view in EnemyBattleViews) m_battleCharacterViewDict.Add(view.BattleCharacter, view);
     }
 
-    private List<BattleCharacterView> InstantiateBattleViews(List<BattleCharacter> characters, Transform parent)
+    private List<BattleCharacterView> InstantiateBattleViews(List<BattleCharacter> characters, BattleCharacterView prefab, Transform parent)
     {
         var views = new List<BattleCharacterView>();
 
@@ -40,7 +41,7 @@ public class BattleEnvironmentManager : MonoBehaviour
 
         foreach (var character in characters)
         {
-            var battleView = Instantiate(m_battleCharacterViewPrefab, parent);
+            var battleView = Instantiate(prefab, parent);
             battleView.Setup(character);
             battleView.transform.localPosition = initialPosition;
             battleView.transform.localRotation = Quaternion.identity;

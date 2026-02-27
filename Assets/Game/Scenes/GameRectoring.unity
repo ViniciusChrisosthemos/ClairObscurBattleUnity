@@ -3614,7 +3614,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_playerCharacterParent: {fileID: 2113040711}
   m_enemyCharacterParent: {fileID: 181010669}
-  m_battleCharacterViewPrefab: {fileID: 5315181202284087801, guid: 7dd0d72ff0a70404c85eed2897a4f7dc, type: 3}
+  m_playerBattleCharacterViewPrefab: {fileID: 5315181202284087801, guid: 7dd0d72ff0a70404c85eed2897a4f7dc, type: 3}
+  m_enemyBattleCharacterViewPrefab: {fileID: 4648343507575056262, guid: 1bd4002196cde0447b3d92de32cf697f, type: 3}
   m_spacing: {x: 2.5, y: 0, z: 0}
   m_characterSize: {x: 0, y: 0, z: 0}
 --- !u!1 &1371954865
