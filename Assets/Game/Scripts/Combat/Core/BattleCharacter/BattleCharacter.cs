@@ -25,14 +25,12 @@ public class BattleCharacter : IBattleCharacter, ITimelineElement
     public void TakeDamage(int damage)
     {
         CurrentHP = Mathf.Max(0, CurrentHP - damage);
-        
+
+        OnTakeDamageEvent?.Invoke(damage, CurrentHP);
+
         if (CurrentHP == 0)
         {
             OnDieEvent?.Invoke();
-        }
-        else
-        {
-            OnTakeDamageEvent?.Invoke(damage, CurrentHP);
         }
     }
 

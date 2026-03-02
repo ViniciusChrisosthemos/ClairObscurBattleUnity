@@ -17,7 +17,7 @@ public class DamageSkillSO : BaseSkillSO
         {
             var finalDamage = m_damage;
 
-            finalDamage = qteResult.Perfects == qteResult.EventAmount ? (int)(finalDamage * m_bonusForPerfectQTE) : finalDamage;
+            finalDamage = qteResult.Perfects == qteResult.EventAmount && qteResult.EventAmount != 0 ? (int)(finalDamage * m_bonusForPerfectQTE) : finalDamage;
 
             Debug.Log($"{finalDamage} {qteResult.EventAmount} {qteResult.Perfects} {qteResult.Regulars} {qteResult.Misses}");
 

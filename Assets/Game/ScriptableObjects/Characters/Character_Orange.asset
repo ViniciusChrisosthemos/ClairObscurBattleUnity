@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Orange
   CharacterIcon: {fileID: -117009042, guid: ca820f2ce8ac19943bc0344d0be08f5b, type: 3}
-  MaxHealth: 100
+  MaxHealth: 50
   Agility: 0
   Skills:
   - {fileID: 11400000, guid: 146cb3edf90252747837ccf41e6a4ee9, type: 2}
-  ModelReferences: {fileID: -4684021117000273469, guid: f1361ba897bfcd044b2bcf424f52eaa0, type: 3}
+  ModelReferences: {fileID: 3594911376911519818, guid: 8ce25cf98b8a47d41a812b95ec5d2478, type: 3}

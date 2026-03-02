@@ -7,6 +7,7 @@ public class BattleCameraManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform m_camera;
+    [SerializeField] private CameraBlurController m_cameraBlurController;
 
     [Header("Animation Parameters")]
     [SerializeField] private float _cameraMoveDuration = 1f;
@@ -68,5 +69,10 @@ public class BattleCameraManager : MonoBehaviour
     public Transform GetCameraTransform()
     {
         return m_camera;
+    }
+
+    public void SetBlur(bool isActive)
+    {
+        m_cameraBlurController.SetBlur(isActive);
     }
 }

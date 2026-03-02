@@ -25,4 +25,9 @@ public class QuickTimeEventResult
             }
         }
     }
+
+    public QuickTimeEventResult()
+    {
+        EventAmount = Misses = Regulars = Perfects = 0;
+    }
 }

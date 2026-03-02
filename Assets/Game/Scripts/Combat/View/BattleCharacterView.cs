@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IMutableAnimationSpeed
 {
     [Header("View References")]
     [SerializeField] private Transform m_modelTransform;
@@ -37,6 +37,7 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
     private Animator m_characterAnimator;
     private SkillAnimationTriggers m_skillAnimationTriggers;
     private Transform m_animationCameraPivot;
+    private Transform m_hitPivot;
 
     private float m_lastParryTime;
 
@@ -51,6 +52,7 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         m_characterAnimator = modelReference.Animator;
         m_skillAnimationTriggers = modelReference.SkillAnimationTriggers;
         m_animationCameraPivot = modelReference.AnimationCameraPivot;
+        m_hitPivot = modelReference.HitPivot;
 
         BattleCharacter.OnDieEvent += HandleCharacterDie;
         BattleCharacter.OnTakeDamageEvent += HandleCharacterTakeDamage;
@@ -81,11 +83,6 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         m_modelTransform.rotation = location.rotation;
 
         m_characterAnimator.SetBool(m_runBoolName, false);
-    }
-
-    public void SetAnimatorSpeed(float speed)
-    {
-        m_characterAnimator.speed = speed;
     }
 
     public void SetTriggerAnimator(string animationTrigger)
@@ -151,7 +148,10 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
 
     private void HandleCharacterTakeDamage(int damageTaken, int currentHP)
     {
-        m_characterAnimator.SetTrigger(m_takeDamageTriggerName);
+        if (BattleCharacter.IsAlive())
+        {
+            m_characterAnimator.SetTrigger(m_takeDamageTriggerName);
+        }
 
         OnTakeDamage?.Invoke(damageTaken);
     }
@@ -166,7 +166,12 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
         InputManager.Instance.OnParryEvent.RemoveListener(HandleParryEvent);
     }
 
-    public bool HasParryIt => (Time.time - m_lastParryTime) < m_parryInterval;
+    public void SetAnimationSpeed(float speed)
+    {
+        m_characterAnimator.speed = speed;
+    }
+
+    public bool HasParryIt => (Time.time - m_lastParryTime) < m_parryTime;
     public Transform ModelTransform => m_modelTransform;
     public Transform ActionSelectionCameraSpot => m_actionSelectionCameraSpot;
     public Transform SkillSelectionCameraSpot => m_skillSelectionCameraSpot;
@@ -176,6 +181,7 @@ public class BattleCharacterView : MonoBehaviour, ITimelineElement, IPointerEnte
     public Transform SelectionSpot => m_SelectionSpot;
     public Transform AttackerSpot => m_attackerSpot;
     public Transform VFXSpot => m_vfxSpot;
+    public Transform HitSpot => m_hitPivot;
 
     public BattleCharacter BattleCharacter { get; private set; }
 

@@ -42,10 +42,13 @@ public class UIEndBattleView : MonoBehaviour
 
 
         m_view.SetActive(true);
+
+        m_battleCameraManager.SetBlur(true);
     }
 
     public void Close()
     {
         m_view.SetActive(false);
+        m_battleCameraManager.SetBlur(false);
     }
 }

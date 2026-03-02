@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Blue
   CharacterIcon: {fileID: 1717255316, guid: d65078779e4111b47aba4fcc62ac3ca5, type: 3}
-  MaxHealth: 100
+  MaxHealth: 50
   Agility: 0
   Skills:
   - {fileID: 11400000, guid: 146cb3edf90252747837ccf41e6a4ee9, type: 2}
-  ModelReferences: {fileID: -4684021117000273469, guid: 2fb529c6f7c18aa4c8f7ddb207d62e30, type: 3}
+  ModelReferences: {fileID: 1733978410280936777, guid: 79a288dfe082ed442b93c1e0bbc2afed, type: 3}

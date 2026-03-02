@@ -27,6 +27,9 @@ public class BattleSkillAnimationManager : MonoBehaviour
     [SerializeField] private GameObject m_missVFX;
     [SerializeField] private GameObject m_parryVFX;
     [SerializeField] private BattleDamageNotificationController m_damageVFX;
+    [SerializeField] private VFXAnimationHelper m_characterDieVFX;
+    [SerializeField] private VFXAnimationHelper m_hitVFX;
+    [SerializeField] private VFXAnimationHelper m_hitParryVFX;
 
     private CombatManager m_combatManager;
     private BaseSkillSO m_skill;
@@ -44,6 +47,7 @@ public class BattleSkillAnimationManager : MonoBehaviour
         m_skill = skill;
         m_characterView = character;
         m_enemyCharacterView = targets[0];
+        m_quickTimeEventResult = new QuickTimeEventResult();
 
         BindAnimationTriggers();
 
@@ -56,14 +60,14 @@ public class BattleSkillAnimationManager : MonoBehaviour
 
     private void HandleStartQTE()
     {
-        m_characterView.SetAnimatorSpeed(m_speedInQTE);
+        m_characterView.SetAnimationSpeed(m_speedInQTE);
 
         m_quickTimeEventManager.StartEvents(m_qteDuration, m_qteAmount, m_qteInterval, HandleQTEResult);
     }
 
     private void HandleEndQTE()
     {
-        m_characterView.SetAnimatorSpeed(1f);
+        m_characterView.SetAnimationSpeed(1f);
     }
 
     private void HandleQTEResult(QuickTimeEventResult result)
@@ -91,39 +95,54 @@ public class BattleSkillAnimationManager : MonoBehaviour
 
     private void HandleDamageEvent()
     {
-        if (m_quickTimeEventResult != null && m_quickTimeEventResult.Misses == m_quickTimeEventResult.EventAmount)
-        {
-            m_enemyCharacterView.Dodge();
+        VFXAnimationHelper hitInstance = null;
 
-            Instantiate(m_missVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
+        if (m_enemyCharacterView.HasParryIt)
+        {
+            var instance = Instantiate(m_parryVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
+            hitInstance = Instantiate(m_hitParryVFX, m_characterView.HitSpot.position, m_characterView.HitSpot.rotation, m_vfxParent);
         }
         else
         {
             var targets = new List<BattleCharacter>() { m_enemyCharacterView.BattleCharacter };
             var skillResult = m_skill.Execute(m_characterView.BattleCharacter, targets, m_quickTimeEventResult);
 
-            if (skillResult.HasParryIt)
+            if (skillResult.HasMissed)
             {
-                var instance = Instantiate(m_parryVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
+                m_enemyCharacterView.Dodge();
+
+                Instantiate(m_missVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
             }
             else
             {
                 var instance = Instantiate(m_damageVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
                 instance.SetContent(skillResult.DamageDone);
+
+                hitInstance = Instantiate(m_hitVFX, m_characterView.HitSpot.position, m_characterView.HitSpot.rotation, m_vfxParent);
             }
 
             if (!m_enemyCharacterView.BattleCharacter.IsAlive())
             {
+                var dieVfx = Instantiate(m_characterDieVFX, m_enemyCharacterView.VFXSpot.position, m_enemyCharacterView.VFXSpot.rotation, m_vfxParent);
+
                 if (m_combatManager.HasEnd)
                 {
                     UnbindAnimationTriggers();
 
                     m_battleCameraManager.StopFollow();
 
-                    var actors = new List<BattleCharacterView>();
+                    var actors = new List<IMutableAnimationSpeed>();
 
                     actors.Add(m_characterView);
                     actors.Add(m_enemyCharacterView);
+                    actors.Add(dieVfx);
+                    dieVfx.SetAutoPlay(false);
+
+                    if (hitInstance != null)
+                    {
+                        hitInstance.SetAutoPlay(false);
+                        actors.Add(hitInstance);
+                    }
 
                     StartCoroutine(SlowAnimationCoroutine(actors, m_timeSlowDurantionOnBattleEnd, null));
                     m_combatManager.EndBattle();
@@ -132,14 +151,17 @@ public class BattleSkillAnimationManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SlowAnimationCoroutine(List<BattleCharacterView> actors, float duration, Action callback)
+    private IEnumerator SlowAnimationCoroutine(List<IMutableAnimationSpeed> actors, float duration, Action callback)
     {
         var currentSpeedAnimation = m_startTimeScale;
         var accumTime = 0f;
 
+        yield return null;
+
         while (accumTime  < duration)
         {
-            actors.ForEach(c => c.SetAnimatorSpeed(currentSpeedAnimation));
+            actors.ForEach(c => c.SetAnimationSpeed(currentSpeedAnimation));
+            TimeManager.Instance.SetTimeScale(currentSpeedAnimation);
 
             currentSpeedAnimation = (1 - (accumTime / duration)) * m_startTimeScale;
 
@@ -149,6 +171,8 @@ public class BattleSkillAnimationManager : MonoBehaviour
         }
 
         callback?.Invoke();
+
+        TimeManager.Instance.SetTimeScale(1);
     }
 
     private void BindAnimationTriggers()
